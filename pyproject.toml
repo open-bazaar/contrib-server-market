@@ -1,0 +1,72 @@
+[project]
+name = "bazaar-contrib-server-market"
+version = "0.3.0rc1"
+description = "The Bazaar Compute plugin market, using each computer's own catalog and package manager"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.15"
+dependencies = [
+    "bazaar-core~=0.3.0rc1",
+    "bazaar-contrib-manager~=0.3.0rc30",
+    "bazaar-contrib-server~=0.3.0rc15",
+    "bazaar-contrib-server-access~=0.3.0rc7",
+    "bazaar-contrib-server-computer~=0.3.0rc2",
+    "pydantic>=2.12.0",
+    "starlette>=0.48.0",
+]
+
+[project.entry-points."bazaar_compute_node.contribs"]
+server-market = "bazaar_contrib_server_market:market"
+
+[project.urls]
+Repository = "https://github.com/open-bazaar/contrib-server-market"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "bazaar-compute[node]~=0.3.0rc30",
+    "bazaar-contrib-http~=0.3.0rc1",
+    "bazaar-contrib-server-database~=0.3.0rc1",
+    "bazaar-contrib-sqlite~=0.3.0rc1",
+    "bazaar-contrib-starlink~=0.3.0rc1",
+    "bazaar-contrib-timer~=0.3.0rc26",
+    "blockbuster>=1.5.29,<1.6",
+    "httpx>=0.28.0,<1",
+    "pyright==1.1.414",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.9.0",
+    "tomli-w>=1.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:anyio"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "e2e: requires a real external provider",
+    "system: runs real native system services in an isolated environment",
+]
+
+[tool.pyright]
+include = ["src", "tests", "scripts"]
+pythonVersion = "3.15"
+pythonPlatform = "All"
+venvPath = "."
+venv = ".venv"
+typeCheckingMode = "basic"
+reportMatchNotExhaustive = "error"
+reportUnreachable = "warning"
+reportUnusedFunction = "warning"
+reportUnusedVariable = "warning"
+
+[tool.ruff.lint]
+extend-select = ["ASYNC"]
+
+[tool.uv.sources]
+bazaar-contrib-manager = { git = "https://github.com/yuchanns/bazaar-compute-node.git", rev = "836143e532ec5c591030b9e583b83d1e88d31829", subdirectory = "contrib/manager" }
