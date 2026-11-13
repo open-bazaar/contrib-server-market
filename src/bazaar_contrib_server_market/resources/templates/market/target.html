@@ -1,0 +1,16 @@
+<section class="scope" aria-label="{{ t.text('market.target') }}">
+  <div class="scope-main">
+    <div class="eyebrow">{{ t.text("market.target") }}</div>
+    <div class="target-wrap" x-data="{open:false}" @click.outside="open=false" @keydown.escape.window="open=false">
+      <button class="target-button" id="target-button" type="button" @click="open=!open" :aria-expanded="open" aria-controls="target-menu">
+        <span class="target-icon{% if selection.computer == 'server' %} server{% endif %}"><span class="i">{% include 'market/icons/server.svg' if selection.computer == 'server' else 'market/icons/windows.svg' if host and host.system == 'Windows' else 'market/icons/apple.svg' if host and host.system == 'Darwin' else 'market/icons/linux.svg' if host and host.system == 'Linux' else 'market/icons/monitor.svg' %}</span></span>
+        <strong>{{ target_name }}</strong><span class="scope-type{% if selection.computer == 'server' %} server{% endif %}">{{ 'Server' if selection.computer == 'server' else t.text('market.computer') }}</span><span class="i sm chevron">{% include "server/icons/chevron-down.svg" %}</span>
+      </button>
+      <div class="target-menu" id="target-menu" x-show="open" x-cloak hx-get="{{ url().replace('/ui/market/', '/ui/market/targets') }}" hx-trigger="click from:#target-button" hx-swap="innerHTML">
+        {% include "market/targets.html" %}
+      </div>
+    </div>
+    <p><span class="online-dot{% if not online %} off{% endif %}"></span>{{ t.text('market.online' if online else 'market.offline') }}{% if host %}<span class="sep-dot">·</span>{{ host.system }} · {{ host.machine }}{% endif %}<span class="sep-dot">·</span>{{ t.text('market.server_description' if selection.computer == 'server' else 'market.computer_description') }}{% if not editable %}<span class="access">{{ t.text("market.readonly") }}</span>{% endif %}</p>
+  </div>
+  <a class="btn scope-link" target="_top" href="{{ '/settings' if selection.computer == 'server' else '/computers/' ~ selection.computer }}"><span class="i sm">{% include "server/icons/settings.svg" if selection.computer == 'server' else "market/icons/monitor.svg" %}</span>{{ t.text('market.server_settings' if selection.computer == 'server' else 'market.view_computer') }}<span class="i xs">{% include "server/icons/chevron-right.svg" %}</span></a>
+</section>

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from bazaar_contrib_manager import Package
 from pydantic import BaseModel, ConfigDict, ValidationError
 lazy from bazaar_contrib_server import Account, Server
 lazy from bazaar_contrib_server_access import Access
@@ -23,6 +24,18 @@ class IndexChange(BaseModel):
     remove: bool = False
 
 
+class Computer(BaseModel):
+    ref: str
+    name: str
+    online: bool
+    editable: bool
+
+
+class Targets(BaseModel):
+    server: bool
+    computers: tuple[Computer, ...]
+
+
 class API:
     def __init__(
         self, server: Server, access: Access, computers: Computers, market: Market
@@ -40,12 +53,18 @@ class API:
                     Route(f"{prefix}/indexes/refresh", self.refresh, methods=["POST"]),
                     Route(f"{prefix}/catalog", self.entries),
                     Route(f"{prefix}/installed", self.installed),
+                    Route(f"{prefix}/packages/{{name}}", self.detail),
+                    Route(f"{prefix}/install", self.install, methods=["POST"]),
                     Route(f"{prefix}/operations/{{id:uuid}}", self.operation),
                 ]
             )
 
     async def targets(self, request: Request) -> Response:
-        account: Account = request.state.account
+        return JSONResponse(
+            (await self.accessible(request.state.account)).model_dump(mode="json")
+        )
+
+    async def accessible(self, account: Account) -> Targets:
         if not account.allows(VIEW):
             raise HTTPException(status_code=403)
         allowed = await self._access.targets(account, "computer", VIEW)
@@ -53,28 +72,33 @@ class API:
             None if allowed is None else tuple(allowed)
         )
         await self._server.refs.load(computer.id for computer in computers)
-        return JSONResponse(
-            {
-                "server": account.admin,
-                "computers": [
-                    {
-                        "ref": str(self._server.refs.ref(computer.id)),
-                        "name": computer.name,
-                        "online": computer.online,
-                        "editable": await self._access.can(
+        return Targets(
+            server=account.admin,
+            computers=tuple(
+                [
+                    Computer(
+                        ref=str(self._server.refs.ref(computer.id)),
+                        name=computer.name,
+                        online=computer.online,
+                        editable=await self._access.can(
                             account, "computer", computer.id, UPDATE
                         ),
-                    }
+                    )
                     for computer in computers
-                ],
-            }
+                ]
+            ),
         )
 
     async def _target(self, request: Request, point: str = VIEW) -> str | None:
-        account: Account = request.state.account
+        return await self.target(
+            request.state.account, request.path_params.get("ref"), point
+        )
+
+    async def target(
+        self, account: Account, ref: str | None, point: str = VIEW
+    ) -> str | None:
         if not account.allows(point):
             raise HTTPException(status_code=403)
-        ref = request.path_params.get("ref")
         if ref is None:
             if not account.admin:
                 raise HTTPException(status_code=403)
@@ -114,6 +138,20 @@ class API:
                 for item in await self._market.installed(computer)
             ]
         )
+
+    async def detail(self, request: Request) -> Response:
+        computer = await self._target(request)
+        package = await self._market.detail(computer, request.path_params["name"])
+        return JSONResponse(package.model_dump(mode="json"))
+
+    async def install(self, request: Request) -> Response:
+        computer = await self._target(request, UPDATE)
+        try:
+            package = Package.model_validate_json(await request.body())
+        except ValidationError as error:
+            return JSONResponse({"error": str(error)}, status_code=422)
+        operation = await self._market.add(computer, package)
+        return JSONResponse(operation.model_dump(mode="json"))
 
     async def index(self, request: Request) -> Response:
         computer = await self._target(request, UPDATE)

@@ -1,4 +1,151 @@
-"market.permission.view" = "View the plugin market"
-"market.permission.update" = "Edit the plugin market"
+"market.permission.view" = "View the Contrib market"
+"market.permission.update" = "Edit the Contrib market"
 "contribs.view" = "View market"
 "contribs.update" = "Edit market"
+
+"market.title" = "Contrib market"
+"market.target" = "Current target"
+"market.server" = "Bazaar Server"
+"market.no_computer" = "No accessible computers"
+"market.offline" = "Offline"
+"market.editable" = "Can edit"
+"market.readonly" = "Read only"
+"market.unavailable" = "The computer is unavailable"
+"market.connect_first" = "Connect this computer to browse its Contribs."
+"market.retry" = "Retry"
+"market.views" = "Market views"
+"market.catalog" = "Discover Contribs"
+"market.installed" = "Installed"
+"market.indexes" = "Manage indexes"
+"market.cached" = "Cached"
+"market.not_read" = "Not read yet"
+"market.items" = "packages"
+"market.remove_index" = "Remove"
+"market.index_location" = "Local path or HTTP(S) index address"
+"market.add_index" = "Add index"
+"market.refresh" = "Refresh indexes"
+"market.search" = "Search packages"
+"market.source" = "Package source"
+"market.all_sources" = "All sources"
+"market.filter" = "Filter"
+"market.no_entries" = "No packages match these filters."
+"market.no_installed" = "No Contribs are installed on this computer."
+"market.package" = "Package details"
+"market.close" = "Close"
+"market.from_indexes" = "From indexes"
+"market.version" = "Version requirement"
+"market.version_default" = "Default version, or e.g. >=0.3.0rc1"
+"market.install" = "Install"
+"market.actual_version" = "Installed version"
+"market.entries" = "Entry points"
+"market.configuration" = "Configuration fields"
+"market.compatibility" = "Dependency compatibility"
+"market.install_complete" = "Package installed"
+"market.saved" = "Dependency declaration saved"
+"market.applied" = "Configuration applied"
+"market.restart_required" = "The host needs a restart to apply this change."
+"market.view_installed" = "View installed Contribs"
+"market.request_failed" = "The request could not be submitted"
+"market.welcome" = "Connect a computer to get started"
+"market.welcome_text" = "Connect your computer to Bazaar to browse, install and manage Contribs that extend its capabilities."
+"market.add_computer" = "Add a computer"
+"market.step1" = "Add your computer"
+"market.step1_text" = "Open Computers and create a connection."
+"market.step2" = "Connect the node"
+"market.step2_text" = "Run the provided command on that computer."
+"market.step3" = "Choose Contribs"
+"market.step3_text" = "Return here to install Contribs on that computer."
+"market.shared_note" = "Shared computers with market permission appear here too."
+"market.phase.queued" = "Queued"
+"market.phase.resolving" = "Resolving dependencies"
+"market.phase.preflight" = "Checking compatibility"
+"market.phase.installing" = "Downloading and installing"
+"market.phase.saving" = "Saving configuration"
+"market.phase.applying" = "Applying configuration"
+"market.phase.complete" = "Complete"
+"market.phase.failed" = "Failed"
+"market.phase.cancelled" = "Cancelled"
+
+"market.accessible" = "Accessible computers"
+"market.zero_computers" = "0 computers"
+"market.scope_description" = "Your computers and shared computers with market access"
+"market.guide" = "Connect a computer"
+"market.platforms" = "Supports Windows, macOS and Linux"
+"market.setup_steps" = "Connection steps"
+
+"market.subtitle" = "Add capabilities to your computers and Server"
+
+"market.computer" = "Computer"
+
+"market.server_group" = "Server"
+
+"market.online" = "Online"
+
+"market.server_description" = "Manage Bazaar Server’s own Contribs"
+
+"market.computer_description" = "Manage this computer’s Contribs"
+
+"market.server_settings" = "Server settings"
+
+"market.view_computer" = "View computer"
+
+"market.search_placeholder" = "Search Contrib names or summaries"
+
+"market.state" = "Installation status"
+
+"market.all_packages" = "All Contribs"
+
+"market.available" = "Not installed"
+
+"market.synced" = "Just synced"
+
+"market.package_list" = "Contribs"
+
+"market.index_footer" = "From {{ count }} indexes subscribed by {{ name }}"
+
+"market.installed_footer" = "Showing {{ count }} / {{ total }} Contribs"
+
+"market.target_status" = "Installation status belongs to the current target"
+
+"market.includes_direct" = "Includes directly installed local Contribs"
+
+"market.index_heading" = "Indexes for {{ name }}"
+
+"market.index_saved" = "Index subscriptions are saved on {{ name }}"
+
+"market.index_unit" = "indexes"
+
+"market.install_target" = "Install on {{ name }}"
+
+"market.details" = "View details"
+
+"market.read" = "Read"
+
+"market.enabled" = "Enabled"
+
+"market.disabled" = "Disabled"
+
+"market.failed" = "Error"
+
+"market.updates" = "Update available"
+
+"market.all_states" = "All states"
+
+
+"market.more" = "More actions"
+
+"market.update_to" = "Update to {{ version }}"
+
+"market.upgrade" = "Update Contrib"
+
+"market.remove" = "Uninstall Contrib"
+
+
+
+
+"market.target_counts" = "{{ packages }} installed · {{ indexes }} indexes"
+
+"market.removed" = "Contrib uninstalled"
+"market.updated" = "Contrib updated"
+"market.index_subscription_saved" = "Index subscriptions saved"
+"market.activation_saved" = "Contrib activation saved"

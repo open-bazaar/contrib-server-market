@@ -1,0 +1,15 @@
+{% if fragment and selection.package %}{% if package or selected and selection.view == 'catalog' %}{% include "market/detail.html" %}{% else %}<div id="package" hx-swap-oob="outerHTML"></div>{% endif %}{% endif %}
+{% if fragment %}<span id="installed-count" hx-swap-oob="outerHTML">{{ installed | length }}</span>{% endif %}
+{% set target_name = chosen.name if chosen else t.text("market.server") %}
+<section id="packages" hx-get="{{ url().replace('/ui/market/', '/ui/market/updates' if selection.view == 'installed' else '/ui/market/packages') }}" hx-trigger="market:changed from:body" hx-swap="outerMorph" data-updates="{{ 'ready' if checked else 'checking' }}">
+{% if failure is not none %}<p class="error" role="alert">{{ failure }}</p>{% endif %}
+{% if selection.view == 'installed' and not checked %}<span hidden hx-get="{{ url().replace('/ui/market/', '/ui/market/updates') }}" hx-trigger="load" hx-target="#packages" hx-swap="outerMorph"></span>{% endif %}
+        <section class="package-grid{% if selection.view == 'catalog' %} discover-grid{% else %} installed-packages{% endif %}" aria-label="{{ t.text('market.package_list') }}">
+          {% if selection.view == 'catalog' %}
+            {% for item in entries %}{% include "market/catalog-card.html" %}{% else %}<p class="empty-list">{{ t.text("market.no_entries") }}</p>{% endfor %}
+          {% else %}
+            {% for item in listed_installed %}{% include "market/installed-card.html" %}{% else %}<p class="empty-list">{{ t.text("market.no_installed") }}</p>{% endfor %}
+          {% endif %}
+        </section>
+        <footer class="list-footer"><span>{% if selection.view == 'catalog' %}{{ t.text("market.index_footer", {"name": target_name, "count": indexes | length}) }}{% else %}{{ t.text("market.installed_footer", {"count": listed_installed | length, "total": installed | length}) }}{% endif %}</span><span class="subtle">{{ t.text("market.target_status" if selection.view == 'catalog' else "market.includes_direct") }}</span></footer>
+</section>

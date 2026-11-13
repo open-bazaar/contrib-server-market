@@ -1,4 +1,4 @@
-"""A configured server, real HTTP login and a test login plugin for shared roles."""
+"""A configured server, real HTTP login and a test login Contrib for shared roles."""
 
 from __future__ import annotations
 
@@ -14,8 +14,8 @@ lazy from typing import Any
 
 import httpx
 import tomli_w
-from bazaar_compute_node.boot import build, node
-from bazaar_contrib_config import ConfigDocument, Configuration
+from bazaar_compute_node.boot import node
+from bazaar_contrib_config import Configuration
 from bazaar_contrib_http import HTTP
 from bazaar_contrib_server import SERVER
 from bazaar_contrib_server_access import ACCESS
@@ -28,6 +28,7 @@ from starlette.responses import Response
 from starlette.routing import Route
 
 ENTRIES = (
+    ("status", {}),
     ("timer-wheel", {}),
     ("commands", {}),
     ("contrib-manager", {}),
@@ -42,6 +43,7 @@ ENTRIES = (
     ("server-overview", {}),
     ("server-relay-memory", {}),
     ("server-computer", {}),
+    ("server-agent", {}),
     ("server-market", {}),
 )
 
@@ -102,31 +104,31 @@ async def serving(home: Path) -> AsyncIterator[Served]:
     }
     await asyncio.to_thread(config.write_text, tomli_w.dumps(document))
 
-    def select(document: ConfigDocument) -> Composition:
-        composition = build(document)
-        return composition.model_copy(
-            update={
-                "entries": (
-                    *composition.entries,
-                    ContribEntry(
-                        name="door",
-                        definition=Contrib(
-                            accepts=[SERVER, ACCESS, SERVER_DB], lifespan=enter
-                        ),
-                    ),
-                    ContribEntry(
-                        name="look",
-                        definition=Contrib(accepts=[HTTP, COMPUTERS], lifespan=look),
-                    ),
-                )
-            }
-        )
-
     logger = logging.getLogger("bazaar_contrib_server_access")
     handler = Printed()
     logger.addHandler(handler)
     try:
-        async with node(configer_options=(str(config),), start=select) as hub:
+        async with (
+            node(configer_options=(str(config),)) as hub,
+            hub.enable(
+                Composition(
+                    entries=[
+                        ContribEntry(
+                            name="door",
+                            definition=Contrib(
+                                accepts=[SERVER, ACCESS, SERVER_DB], lifespan=enter
+                            ),
+                        ),
+                        ContribEntry(
+                            name="look",
+                            definition=Contrib(
+                                accepts=[HTTP, COMPUTERS], lifespan=look
+                            ),
+                        ),
+                    ]
+                )
+            ),
+        ):
             Configuration.check(hub, force=True)
             password = next(
                 (

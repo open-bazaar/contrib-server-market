@@ -1,0 +1,11 @@
+<section id="operation" class="operation{% if operation.phase == 'failed' %} failed{% endif %}" aria-live="polite"{% if operation.phase not in finished %} hx-get="/ui/market/operations/{{ operation.id }}?computer={{ selection.computer }}" hx-trigger="every 1s" hx-swap="outerHTML"{% endif %}>
+  <div class="operation-heading"><b>{{ t.text("market.phase." ~ operation.phase) }}</b>{% if operation.package %}<span>{{ operation.package }}</span>{% endif %}<code>{{ operation.id }}</code></div>
+  {% if operation.installed %}<p class="success">{{ t.text("market.removed" if operation.kind == "remove" else "market.updated" if operation.kind == "upgrade" else "market.install_complete") }}{% if operation.version %} · {{ operation.version }}{% endif %}</p>{% endif %}
+  {% if operation.config_saved %}<p>{{ t.text("market.index_subscription_saved" if operation.kind.startswith("index-") else "market.activation_saved" if operation.kind in ("enable", "disable") else "market.saved") }}</p>{% endif %}
+  {% if operation.applied %}<p>{{ t.text("market.applied") }}</p>{% endif %}
+  {% if operation.pending_restart %}<p>{{ t.text("market.restart_required") }}</p>{% endif %}
+  {% if operation.error %}<p class="error">{{ operation.error }}</p>{% endif %}
+  {% if operation.recovery %}<p>{{ operation.recovery }}</p>{% endif %}
+  {% if package %}{% include "market/metadata.html" %}{% endif %}
+  {% if operation.phase in finished %}<a href="{{ url(view='installed', operation=none, package='') }}">{{ t.text("market.view_installed") }}</a>{% endif %}
+</section>

@@ -1,0 +1,32 @@
+        <div class="scope">
+          <span class="scope-icon"><span class="i"><!-- @license lucide-static v1.46.0 - ISC --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></svg></span></span>
+          <div><h2>{{ t.text("market.accessible") }} <span class="scope-count">{{ t.text("market.zero_computers") }}</span></h2><p>{{ t.text("market.scope_description") }}</p></div>
+        </div>
+        <section class="empty-panel" aria-label="{{ t.text("market.guide") }}">
+          <div class="welcome">
+            <div class="scene" aria-hidden="true">
+              <div class="scene-dot dot-one"></div><div class="scene-dot dot-two"></div>
+              <svg class="scene-screen" viewBox="0 0 200 150" fill="none">
+                <rect x="22" y="24" width="156" height="98" rx="12" fill="var(--raised)" stroke="var(--line-strong)" stroke-width="1.5"/>
+                <rect x="31" y="33" width="138" height="69" rx="5" fill="var(--bg)"/>
+                <path d="M81 122v14m38-14v14M70 138h60" stroke="var(--line-strong)" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="100" cy="112" r="2" fill="var(--faint)"/>
+                <rect x="79" y="46" width="42" height="42" rx="10" fill="var(--saffron-soft)" stroke="var(--saffron-line)"/>
+                <path d="M100 57v20M90 67h20" stroke="var(--saffron)" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span class="scene-tile tile-chat"><span class="i">{% include "market/store.svg" %}</span></span>
+              <span class="scene-tile tile-bot"><span class="i"><!-- @license lucide-static v1.46.0 - ISC --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" /><circle cx="12" cy="12" r="3" /></svg>
+</span></span>
+            </div>
+            <h2>{{ t.text("market.welcome") }}</h2>
+            <p class="intro">{% for line in t.text("market.welcome_text").split("\n") %}{{ line }}{% if not loop.last %}<br class="wide-break">{% endif %}{% endfor %}</p>
+            {% if account.allows("computers.create") %}<a class="btn primary connect" href="/computers" target="_top"><span class="i"><!-- @license lucide-static v1.46.0 - ISC --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M5 12h14" /><path d="M12 5v14" /></svg></span>{{ t.text("market.add_computer") }}</a>{% endif %}
+            <span class="platforms">{{ t.text("market.platforms") }}</span>
+          </div>
+          <ol class="setup-steps" aria-label="{{ t.text("market.setup_steps") }}">
+            <li><span class="step-number current">1</span><div><h3>{{ t.text("market.step1") }}</h3><p>{{ t.text("market.step1_text") }}</p></div></li>
+            <li><span class="step-number">2</span><div><h3>{{ t.text("market.step2") }}</h3><p>{{ t.text("market.step2_text") }}</p></div></li>
+            <li><span class="step-number">3</span><div><h3>{{ t.text("market.step3") }}</h3><p>{{ t.text("market.step3_text") }}</p></div></li>
+          </ol>
+        </section>
+        <p class="page-note"><span class="i"><!-- @license lucide-static v1.46.0 - ISC --><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg></span>{{ t.text("market.shared_note") }}</p>

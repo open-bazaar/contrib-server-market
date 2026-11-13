@@ -41,7 +41,11 @@ jobs:
       - name: Check types
         run: uv run --no-sync pyright
       - name: Run real business tests
-        run: uv run --no-sync python scripts/ci_pytest.py --basetemp "$RUNNER_TEMP/market" -vv --show-capture=no -m 'not e2e and not system'
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/playwright
+        run: |
+          uv run --no-sync playwright install --with-deps chromium
+          uv run --no-sync python scripts/ci_pytest.py --basetemp "$RUNNER_TEMP/market" -vv --show-capture=no -m 'not e2e and not system'
       - name: Run system tests
         run: uv run --no-sync python scripts/ci_pytest.py -vv --show-capture=no -m system || test "$?" -eq 5
       - name: Build distributions

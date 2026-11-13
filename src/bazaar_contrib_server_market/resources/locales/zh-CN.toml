@@ -1,4 +1,151 @@
-"market.permission.view" = "查看插件目录、索引和安装状态"
-"market.permission.update" = "管理索引、安装插件和修改配置"
+"market.permission.view" = "查看 Contrib 目录、索引和安装状态"
+"market.permission.update" = "管理索引、安装 Contrib 和修改配置"
 "contribs.view" = "市场查看"
 "contribs.update" = "市场编辑"
+
+"market.title" = "市场"
+"market.target" = "当前管理对象"
+"market.server" = "Bazaar Server"
+"market.no_computer" = "暂无可访问的电脑"
+"market.offline" = "离线"
+"market.editable" = "可编辑"
+"market.readonly" = "只读"
+"market.unavailable" = "电脑暂时无法连接"
+"market.connect_first" = "连接这台电脑后，即可查看它的 Contrib。"
+"market.retry" = "重试"
+"market.views" = "市场视图"
+"market.catalog" = "发现 Contrib"
+"market.installed" = "已安装"
+"market.indexes" = "管理索引"
+"market.cached" = "已有缓存"
+"market.not_read" = "尚未读取"
+"market.items" = "个 Contrib"
+"market.remove_index" = "移除"
+"market.index_location" = "本地路径或 HTTP(S) 索引地址"
+"market.add_index" = "添加索引"
+"market.refresh" = "刷新索引"
+"market.search" = "搜索 Contrib"
+"market.source" = "包源"
+"market.all_sources" = "全部来源"
+"market.filter" = "筛选"
+"market.no_entries" = "没有符合条件的 Contrib。"
+"market.no_installed" = "这台电脑还没有安装 Contrib。"
+"market.package" = "Contrib 详情"
+"market.close" = "关闭"
+"market.from_indexes" = "来自索引"
+"market.version" = "版本要求"
+"market.version_default" = "默认版本，或如 >=0.3.0rc1"
+"market.install" = "安装"
+"market.actual_version" = "实际安装版本"
+"market.entries" = "模块入口"
+"market.configuration" = "配置字段"
+"market.compatibility" = "依赖兼容要求"
+"market.install_complete" = "包安装完成"
+"market.saved" = "依赖声明已保存"
+"market.applied" = "配置已应用"
+"market.restart_required" = "此变更需要重启宿主后应用。"
+"market.view_installed" = "查看已安装 Contrib"
+"market.request_failed" = "请求未能提交"
+"market.welcome" = "还没有可访问的电脑"
+"market.welcome_text" = "把你的电脑接入 Bazaar，即可浏览、安装和管理 Contrib，\n按需扩展这台电脑的能力。"
+"market.add_computer" = "添加电脑"
+"market.step1" = "添加你的电脑"
+"market.step1_text" = "为电脑命名，获取接入命令"
+"market.step2" = "在电脑上完成接入"
+"market.step2_text" = "运行命令，让它连接到 Bazaar"
+"market.step3" = "安装所需 Contrib"
+"market.step3_text" = "按需扩展这台电脑的能力"
+"market.shared_note" = "获得市场权限的共享电脑也会显示在这里。"
+"market.phase.queued" = "排队中"
+"market.phase.resolving" = "解析依赖"
+"market.phase.preflight" = "检查兼容性"
+"market.phase.installing" = "下载与安装"
+"market.phase.saving" = "保存配置"
+"market.phase.applying" = "应用配置"
+"market.phase.complete" = "已完成"
+"market.phase.failed" = "失败"
+"market.phase.cancelled" = "已取消"
+
+"market.accessible" = "可访问的电脑"
+"market.zero_computers" = "0 台"
+"market.scope_description" = "自己的电脑，以及获得市场授权的共享电脑"
+"market.guide" = "接入电脑引导"
+"market.platforms" = "支持 Windows、macOS 和 Linux"
+"market.setup_steps" = "接入步骤"
+
+"market.subtitle" = "为你的电脑和 Server 添加能力"
+
+"market.computer" = "电脑"
+
+"market.server_group" = "服务端"
+
+"market.online" = "在线"
+
+"market.server_description" = "管理 Bazaar Server 自身的 Contrib"
+
+"market.computer_description" = "管理这台电脑上的 Contrib"
+
+"market.server_settings" = "Server 设置"
+
+"market.view_computer" = "查看电脑"
+
+"market.search_placeholder" = "搜索 Contrib 名称或简介"
+
+"market.state" = "安装状态"
+
+"market.all_packages" = "全部 Contrib"
+
+"market.available" = "未安装"
+
+"market.synced" = "刚刚同步"
+
+"market.package_list" = "Contrib 列表"
+
+"market.index_footer" = "来自 {{ name }} 订阅的 {{ count }} 个索引"
+
+"market.installed_footer" = "显示 {{ count }} / {{ total }} 个 Contrib"
+
+"market.target_status" = "安装状态以当前管理对象为准"
+
+"market.includes_direct" = "包含直接安装的本地 Contrib"
+
+"market.index_heading" = "{{ name }} 的索引"
+
+"market.index_saved" = "索引订阅保存在 {{ name }}"
+
+"market.index_unit" = "个索引"
+
+"market.install_target" = "安装到 {{ name }}"
+
+"market.details" = "查看详情"
+
+"market.read" = "已读取"
+
+"market.enabled" = "已启用"
+
+"market.disabled" = "未启用"
+
+"market.failed" = "出错"
+
+"market.updates" = "可更新"
+
+"market.all_states" = "全部状态"
+
+
+"market.more" = "更多操作"
+
+"market.update_to" = "更新至 {{ version }}"
+
+"market.upgrade" = "更新 Contrib"
+
+"market.remove" = "卸载 Contrib"
+
+
+
+
+"market.target_counts" = "{{ packages }} 个已安装 · {{ indexes }} 个索引"
+
+"market.removed" = "Contrib 已卸载"
+"market.updated" = "Contrib 已更新"
+"market.index_subscription_saved" = "索引订阅已保存"
+"market.activation_saved" = "Contrib 启用状态已保存"

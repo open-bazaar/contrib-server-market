@@ -1,0 +1,37 @@
+{% extends "server/base.html" %}
+{% block title %}{{ t.text("market.title") }}{% endblock %}
+{% block crumbs %}<span class="top-sub">{{ t.text("market.subtitle") }}</span>{% endblock %}
+{% block head %}<link rel="stylesheet" href="{{ asset('market.css') }}">{% if selection.computer is none %}<link rel="stylesheet" href="{{ asset('empty.css') }}">{% endif %}{% endblock %}
+{% block body %}
+{% set target_name = chosen.name if chosen else t.text("market.server") %}
+<main class="market-content">
+  {% if selection.computer is none %}
+    {% include "market/empty.html" %}
+  {% else %}
+    {% include "market/target.html" %}
+    {% if not online or failure is not none %}
+      <section class="unavailable"><h2>{{ t.text("market.unavailable") }}</h2><p>{{ failure or t.text("market.connect_first") }}</p><a class="btn" href="{{ url() }}">{{ t.text("market.retry") }}</a></section>
+    {% else %}
+      <nav class="market-tabs" aria-label="{{ t.text('market.views') }}">
+        <a class="market-tab{% if selection.view == 'installed' %} on{% endif %}" href="{{ url(view='installed', package='', source='', state='', operation=none) }}"{% if selection.view == 'installed' %} aria-current="page"{% endif %}>{{ t.text("market.installed") }} <span id="installed-count">{{ installed | length }}</span></a>
+        <a class="market-tab{% if selection.view == 'catalog' %} on{% endif %}" href="{{ url(view='catalog', package='', source='', state='', operation=none) }}"{% if selection.view == 'catalog' %} aria-current="page"{% endif %}>{{ t.text("market.catalog") }}</a>
+        <a class="index-link{% if selection.view == 'indexes' %} on{% endif %}" href="{{ url(view='indexes', package='', source='', state='', operation=none) }}"><span class="i sm">{% include "market/icons/layers.svg" %}</span>{{ t.text("market.indexes") }} <span>{{ indexes | length }}</span></a>
+      </nav>
+      {% if operation %}{% with package=operation_package %}{% include "market/operation.html" %}{% endwith %}{% else %}<div id="operation"></div>{% endif %}
+      {% if selection.view == 'indexes' %}
+        {% include "market/indexes.html" %}
+      {% else %}
+        <form class="toolbar" action="/ui/market/">
+          <input type="hidden" name="computer" value="{{ selection.computer }}"><input type="hidden" name="view" value="{{ selection.view }}">
+          <label class="search-box"><span class="i sm">{% include "market/icons/search.svg" %}</span><input id="search" name="q" value="{{ selection.q }}" placeholder="{{ t.text('market.search_placeholder') }}" aria-label="{{ t.text('market.search') }}" onchange="this.form.requestSubmit()"></label>
+          <span class="input select filter"><select name="source" aria-label="{{ t.text('market.source') }}" onchange="this.form.requestSubmit()"><option value="">{{ t.text("market.all_sources") }}</option>{% for source in sources %}<option value="{{ source }}"{% if selection.source == source %} selected{% endif %}>{{ source_label(source) }}</option>{% endfor %}</select><span class="i xs">{% include "server/icons/chevron-down.svg" %}</span></span>
+          <span class="input select filter"><select name="state" aria-label="{{ t.text('market.state') }}" onchange="this.form.requestSubmit()"><option value="">{{ t.text("market.all_packages" if selection.view == 'catalog' else "market.all_states") }}</option>{% for value,label in [('installed','installed'),('available','available')] if selection.view == 'catalog' %}<option value="{{ value }}"{% if selection.state == value %} selected{% endif %}>{{ t.text("market." ~ label) }}</option>{% endfor %}{% for value,label in [('active','enabled'),('inactive','disabled'),('failed','failed'),('updates','updates')] if selection.view == 'installed' %}<option value="{{ value }}"{% if selection.state == value %} selected{% endif %}>{{ t.text("market." ~ label) }}</option>{% endfor %}</select><span class="i xs">{% include "server/icons/chevron-down.svg" %}</span></span>
+          <button class="fresh" type="submit" aria-label="{{ t.text('market.filter') }}">{{ t.text("market.synced") }}<span class="i sm">{% include "market/icons/refresh.svg" %}</span></button>
+        </form>
+        {% if selected or package %}{% include "market/detail.html" %}{% endif %}
+        {% include "market/packages.html" %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</main>
+{% endblock %}
