@@ -1,18 +1,22 @@
 [project]
 name = "bazaar-contrib-server-market"
 version = "0.3.0rc1"
-description = "The Bazaar Compute plugin market, using each computer's own catalog and package manager"
+description = "The Bazaar Compute Contrib market, using each computer's own catalog and package manager"
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.15"
 dependencies = [
     "bazaar-core~=0.3.0rc1",
-    "bazaar-contrib-manager~=0.3.0rc30",
+    "bazaar-contrib-config~=0.3.0rc31",
+    "bazaar-contrib-status~=0.3.0rc32",
+    "bazaar-contrib-manager~=0.3.0rc32",
     "bazaar-contrib-server~=0.3.0rc15",
     "bazaar-contrib-server-access~=0.3.0rc7",
     "bazaar-contrib-server-computer~=0.3.0rc2",
+    "bazaar-contrib-sidecar~=0.3.0rc1",
     "pydantic>=2.12.0",
+    "python-multipart>=0.0.32",
     "starlette>=0.48.0",
 ]
 
@@ -28,14 +32,30 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
-    "bazaar-compute[node]~=0.3.0rc30",
+    "bazaar-compute[node]~=0.3.0rc31",
+    "bazaar-contrib-agent~=0.3.0rc1",
+    "bazaar-contrib-audit~=0.3.0rc1",
+    "bazaar-contrib-channel~=0.3.0rc1",
+    "bazaar-contrib-collaboration~=0.3.0rc1",
+    "bazaar-contrib-config-filesystem~=0.3.0rc1",
+    "bazaar-contrib-harness~=0.3.0rc1",
+    "bazaar-contrib-legacy-node-migrations~=0.3.0rc1",
+    "bazaar-contrib-logging~=0.3.0rc1",
+    "bazaar-contrib-messages~=0.3.0rc1",
+    "bazaar-contrib-reminder~=0.3.0rc1",
+    "bazaar-contrib-schema~=0.3.0rc1",
+    "bazaar-contrib-sidecar-unix~=0.3.0rc1; sys_platform != 'win32'",
+    "bazaar-contrib-sidecar-windows~=0.3.0rc1; sys_platform == 'win32'",
+    "bazaar-contrib-storage~=0.3.0rc1",
     "bazaar-contrib-http~=0.3.0rc1",
     "bazaar-contrib-server-database~=0.3.0rc1",
+    "bazaar-contrib-server-agent~=0.3.0rc12",
     "bazaar-contrib-sqlite~=0.3.0rc1",
     "bazaar-contrib-starlink~=0.3.0rc1",
-    "bazaar-contrib-timer~=0.3.0rc26",
+    "bazaar-contrib-timer~=0.3.0rc31",
     "blockbuster>=1.5.29,<1.6",
     "httpx>=0.28.0,<1",
+    "playwright==1.64.1",
     "pyright==1.1.414",
     "pytest>=8.3.0",
     "pytest-asyncio>=0.24.0",
@@ -69,4 +89,5 @@ reportUnusedVariable = "warning"
 extend-select = ["ASYNC"]
 
 [tool.uv.sources]
-bazaar-contrib-manager = { git = "https://github.com/yuchanns/bazaar-compute-node.git", rev = "836143e532ec5c591030b9e583b83d1e88d31829", subdirectory = "contrib/manager" }
+bazaar-contrib-manager = { git = "https://github.com/yuchanns/bazaar-compute-node.git", rev = "8ff989dcf3eb8f095629b2662a0bdeb4d5fbe55e", subdirectory = "contrib/manager" }
+bazaar-contrib-status = { git = "https://github.com/yuchanns/bazaar-compute-node.git", rev = "8ff989dcf3eb8f095629b2662a0bdeb4d5fbe55e", subdirectory = "contrib/status" }

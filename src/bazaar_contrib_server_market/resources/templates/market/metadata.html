@@ -1,0 +1,6 @@
+<div class="metadata">
+  <div class="version"><b>{{ t.text("market.actual_version") }}</b><code>{{ package.version }}</code></div>
+  {% if package.url %}<code class="direct-source">{{ package.url }}</code>{% endif %}
+  <details class="entry-list"><summary>{{ t.text("market.entries") }} <span>{{ package.entries | length }}</span></summary>{% for entry in package.entries %}<div class="entry" id="entry-{{ entry.name }}"><b>{{ entry.name }}</b><code>{{ entry.value }}</code>{% if entry.error %}<p class="error">{{ entry.error }}</p>{% endif %}{% if entry.config_schema %}<details><summary>{{ t.text("market.configuration") }}</summary><pre>{{ entry.config_schema | tojson(indent=2) }}</pre></details>{% endif %}</div>{% endfor %}</details>
+  {% if package.requirements %}<details><summary>{{ t.text("market.compatibility") }}</summary><ul>{% for requirement in package.requirements %}<li><code>{{ requirement }}</code></li>{% endfor %}</ul></details>{% endif %}
+</div>

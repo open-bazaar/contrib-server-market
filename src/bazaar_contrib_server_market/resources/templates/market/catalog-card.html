@@ -1,0 +1,10 @@
+<article class="package-card">
+  <div class="package-head">
+    {% if item.icon_url %}<a class="package-icon" href="{{ url(view='catalog', package=item.package, source=item.source, operation=none) }}"><img src="{{ item.icon_url }}" alt="" loading="lazy"></a>{% endif %}
+    <div class="package-title"><h3><a href="{{ url(view='catalog', package=item.package, source=item.source, operation=none) }}">{{ item.package.removeprefix('bazaar-contrib-') }}</a></h3><div class="version">{% if item.package in kept %}{{ t.text("market.installed") }} {{ kept[item.package].version }}{% else %}{{ item.package }}{% endif %}</div></div>
+    {% if item.package in kept %}<span class="package-status">{{ t.text("market.installed") }}</span>{% endif %}
+  </div>
+  {% if item.summary %}<p class="package-description">{{ item.summary }}</p>{% endif %}
+  <div class="package-origin" title="{{ item.indexes | join('\n') }}"><span class="i">{% include "market/icons/layers.svg" %}</span>{{ t.text("market.from_indexes") }} · {{ item.indexes | length }}</div>
+  <div class="package-footer"><span class="source{% if item.source == 'https://pypi.org/simple/' %} pypi{% endif %}" title="{{ item.source }}"><span class="i">{% include "market/icons/folder.svg" if item.source.startswith('file:') else 'market/icons/pypi.svg' if item.source == 'https://pypi.org/simple/' else 'market/icons/download.svg' %}</span><span>{{ source_label(item.source) }}</span></span><a class="btn{% if item.package in kept %} installed{% elif editable %} install{% endif %}" href="{{ url(view='installed', package=item.package, source='', state='', operation=none) if item.package in kept else url(view='catalog', package=item.package, source=item.source, operation=none) }}"><span class="i xs">{% include 'server/icons/check.svg' if item.package in kept else 'market/icons/plus.svg' %}</span>{{ t.text("market.installed") if item.package in kept else t.text("market.install_target", {"name": target_name}) if editable else t.text("market.details") }}</a></div>
+</article>

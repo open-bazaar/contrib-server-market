@@ -32,12 +32,20 @@ async def result(session: httpx.AsyncClient, url: str, response: httpx.Response)
 
 
 @asynccontextmanager
-async def computer(served, session: httpx.AsyncClient, home: Path, name: str):
+async def computer(
+    served,
+    session: httpx.AsyncClient,
+    home: Path,
+    name: str,
+    *,
+    python: Path | None = None,
+    indexes: tuple[str, ...] = ("resource://bazaar_contrib_manager/catalog.json",),
+):
     ref, token = await enrol(served, session, name)
     await asyncio.to_thread(home.mkdir)
     config = home / "node.toml"
     document = await asyncio.to_thread(defaults)
-    document["contrib_indexes"] = ["resource://bazaar_contrib_manager/catalog.json"]
+    document["contrib_indexes"] = list(indexes)
     for package in document["contribs"]:
         for entry in package["enabled"]:
             if entry["entry"] == "sidecar-unix":
@@ -54,7 +62,7 @@ async def computer(served, session: httpx.AsyncClient, home: Path, name: str):
     await asyncio.to_thread(config.write_text, tomli_w.dumps(document))
     log = await asyncio.to_thread((home / "node.log").open, "wb")
     process = await asyncio.create_subprocess_exec(
-        sys.executable,
+        str(python or sys.executable),
         str(Path(__file__).with_name("run_node.py")),
         "config-filesystem",
         str(config),

@@ -1,0 +1,13 @@
+<section class="package-detail" id="package"{% if fragment %} hx-swap-oob="outerHTML"{% endif %}>
+  <div class="detail-heading"><div class="detail-title">{% if selected and selected.icon_url %}<span class="package-icon"><img src="{{ selected.icon_url }}" alt=""></span>{% endif %}<div><span class="eyebrow">{{ t.text("market.package") }}</span><h2>{{ selected.package if selected else package.package }}</h2></div></div><a class="btn" href="{{ url(package='') }}">{{ t.text("market.close") }}</a></div>
+  {% if selected and selected.summary %}<p>{{ selected.summary }}</p>{% endif %}
+  {% if selected and selected.description %}<div class="description">{{ selected.description | markdown }}</div>{% endif %}
+  {% if selected %}<dl class="facts"><dt>{{ t.text("market.source") }}</dt><dd><code>{{ selected.source }}</code></dd><dt>{{ t.text("market.from_indexes") }}</dt><dd>{% for location in selected.indexes %}<code>{{ location }}</code>{% endfor %}</dd></dl>{% endif %}
+  {% if package %}{% include "market/metadata.html" %}{% endif %}
+  {% if editable and selected %}
+  <form class="install-form" hx-post="{{ url().replace('/ui/market/', '/ui/market/install') }}" hx-target="#operation" hx-swap="outerHTML" hx-disable="find button">
+    <input type="hidden" name="package" value="{{ selected.package if selected else package.package }}"><input type="hidden" name="source" value="{{ selected.source }}">
+    <label for="version">{{ t.text("market.version") }}<input class="input" id="version" name="version" placeholder="{{ t.text('market.version_default') }}"></label><button class="btn primary" type="submit">{{ t.text("market.install") }}</button>
+  </form>
+  {% endif %}
+</section>
