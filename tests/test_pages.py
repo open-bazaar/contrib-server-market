@@ -2,7 +2,41 @@
 
 from pathlib import Path
 
-from served import admin, client, role, serving, through
+from served import admin, client, enrol, role, serving, through
+
+
+async def test_offline_first_computer_keeps_market_and_target_picker_available(
+    home: Path,
+):
+    async with serving(home) as served, client() as boss:
+        await admin(served, boss)
+        ref, _ = await enrol(served, boss, "Offline computer")
+        targets = (await boss.get(f"{served.url}/api/market/targets")).json()
+        assert targets["computers"][0]["ref"] == ref
+        assert not targets["computers"][0]["online"]
+
+        for query in (
+            "",
+            f"?computer={ref}",
+            f"?computer={ref}&view=catalog",
+            f"?computer={ref}&view=indexes",
+        ):
+            page = await boss.get(f"{served.url}/ui/market/{query}")
+            assert page.status_code == 200, page.text
+            assert "The computer is unavailable" in page.text
+            assert "Connect this computer to browse its Contribs." in page.text
+            assert "Offline computer" in page.text
+            assert "0 installed" not in page.text
+            assert "UndefinedError" not in page.text
+
+        menu = await boss.get(f"{served.url}/ui/market/targets?computer={ref}")
+        assert menu.status_code == 200, menu.text
+        assert "Offline computer" in menu.text and "Offline" in menu.text
+        assert "0 installed" not in menu.text
+        assert "computer=server" in menu.text
+        page = await boss.get(f"{served.url}/ui/market/?computer=server")
+        assert page.status_code == 200, page.text
+        assert "bazaar-contrib-manager" in page.text
 
 
 async def test_navigation_empty_guide_and_permissions(home: Path):
