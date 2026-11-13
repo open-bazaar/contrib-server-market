@@ -328,7 +328,9 @@ class Views:
             targets=targets,
             chosen=chosen,
             host=host,
-            target_details={selection.computer: (host, len(installed), len(indexes))},
+            target_details={selection.computer: (host, len(installed), len(indexes))}
+            if host is not None
+            else {},
             online=online,
             editable=editable,
             entries=listed,

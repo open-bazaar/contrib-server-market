@@ -4,7 +4,65 @@ from pathlib import Path
 
 import pytest
 from playwright.async_api import async_playwright, expect
-from served import admin, client, serving
+from served import admin, client, enrol, serving
+
+
+@pytest.mark.parametrize("size", [(1440, 900), (390, 844)], ids=["desktop", "phone"])
+async def test_offline_computer_can_switch_to_server(home: Path, size: tuple[int, int]):
+    async with serving(home) as served, client() as boss, async_playwright() as driver:
+        await admin(served, boss)
+        ref, _ = await enrol(served, boss, "Offline computer")
+        browser = await driver.chromium.launch()
+        try:
+            context = await browser.new_context(
+                locale="en-US", viewport={"width": size[0], "height": size[1]}
+            )
+            await context.add_cookies(
+                [
+                    {
+                        "name": cookie.name,
+                        "value": cookie.value or "",
+                        "url": served.url,
+                    }
+                    for cookie in boss.cookies.jar
+                ]
+            )
+            page = await context.new_page()
+            await page.goto(f"{served.url}/market")
+            frame = page.frame_locator("iframe.frame")
+            await expect(frame.locator(".unavailable")).to_contain_text(
+                "Connect this computer to browse its Contribs."
+            )
+            await frame.locator("#target-button").click()
+            offline = frame.locator("#target-menu .target-option").filter(
+                has_text="Offline computer"
+            )
+            await expect(offline).to_contain_text("Offline")
+            await expect(offline).not_to_contain_text("0 installed")
+            await (
+                frame.locator("#target-menu")
+                .get_by_role("link", name="Bazaar Server", exact=False)
+                .click()
+            )
+            await expect(frame.locator(".installed-packages")).to_contain_text(
+                "server-market"
+            )
+            await frame.locator("#target-button").press("Escape")
+            await expect(frame.locator("#target-menu")).to_be_hidden()
+            await frame.locator("#target-button").click()
+            await (
+                frame.locator("#target-menu .target-option")
+                .filter(has_text="Offline computer")
+                .click()
+            )
+            await expect(frame.locator(".unavailable")).to_be_visible()
+            content = next(one for one in page.frames if "/ui/market/" in one.url)
+            assert f"computer={ref}" in content.url
+            assert await content.evaluate(
+                "document.documentElement.scrollWidth <= innerWidth"
+            )
+        finally:
+            await browser.close()
 
 
 @pytest.mark.parametrize(
